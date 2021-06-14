@@ -10,6 +10,9 @@
     "lib": "lib",
     "test": "__tests__"
   },
+  "bin": {
+    "vow-cli": "bin/vow-cli.js"
+  },
   "files": [
     "lib"
   ],
@@ -18,5 +21,15 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@vow-cli/utils": "^0.0.0",
+    "path-exists": "^4.0.0",
+    "root-check": "1.0.0",
+    "semver": "^7.3.5",
+    "user-home": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   }
 }

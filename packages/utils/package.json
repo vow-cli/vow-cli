@@ -1,9 +1,9 @@
 {
-  "name": "@vow-cli/log",
+  "name": "@vow-cli/utils",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "1340100932@qq.com <1340100932@qq.com>",
-  "homepage": "",
+  "homepage": "https://github.com/theShapeOfvoice/vow-cli#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -16,7 +16,20 @@
   "publishConfig": {
     "registry": "https://registry.npm.taobao.org/"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theShapeOfvoice/vow-cli.git"
+  },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/theShapeOfvoice/vow-cli/issues"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "npmlog": "^4.1.2",
+    "semver": "^7.3.5",
+    "url-join": "^4.0.1"
   }
 }

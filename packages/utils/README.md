@@ -1,11 +1,11 @@
-# `@vow-cli/log`
+# `@vow-cli/utils`
 
 > TODO: description
 
 ## Usage
 
 ```
-const log = require('@vow-cli/log');
+const utils = require('@vow-cli/utils');
 
 // TODO: DEMONSTRATE API
 ```
