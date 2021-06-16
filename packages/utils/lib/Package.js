@@ -71,22 +71,28 @@ class Package {
 
   /**
    * @description: 获取package.json文件
-   * @param {*}
+   * @param {*} isOrigin:默认flase，指通过npminstall下载的package
    * @return {*}
    */
-  getPackageJSON() {
-    return fse.readJSONSync(path.resolve(this.packagePath, "package.json"));
+  getPackageJSON(isOrigin = false) {
+    if (!isOrigin) {
+      return fse.readJSONSync(path.resolve(this.packagePath, "package.json"));
+    }
+    return fse.readJSONSync(path.resolve(this.storePath, "package.json"));
   }
 
   /**
    * @description: 获取package入口文件
-   * @param {*}
+   * @param {*} isOrigin:默认flase，指通过npminstall下载的package
    * @return {*}
    */
-  getPackageEntryFile() {
-    const pkg = this.getPackageJSON();
+  getPackageEntryFile(isOrigin = false) {
+    const pkg = this.getPackageJSON(isOrigin);
     if (pkg) {
-      return formatPath(path.resolve(this.packagePath, pkg.main));
+      if (!isOrigin) {
+        return formatPath(path.resolve(this.packagePath, pkg.main));
+      }
+      return formatPath(path.resolve(this.storePath, pkg.main));
     }
     return null;
   }

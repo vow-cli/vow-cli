@@ -1,0 +1,6 @@
+module.exports = {
+  //默认缓存目录名称
+  DEFAULT_CACHE_DIR_NAME: ".vow-cli",
+  //默认缓存依赖目录名称
+  DEFAULT_DEPENDENCIES_DIR_NAME: "dependencies",
+};
