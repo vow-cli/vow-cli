@@ -3,6 +3,7 @@
 const log = require("./log");
 const npm = require("./npm");
 const Package = require("./Package");
+const inquirer = require("./inquirer");
 
 function exec(command, args, options) {
   const win32 = process.platform === "win32";
@@ -18,4 +19,5 @@ module.exports = {
   npm,
   Package,
   exec,
+  inquirer,
 };

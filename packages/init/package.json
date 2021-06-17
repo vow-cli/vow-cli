@@ -23,6 +23,10 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
+  "dependencies": {
+    "@vow-cli/utils": "^0.0.0",
+    "fs-extra": "^10.0.0"
+  },
   "bugs": {
     "url": "https://github.com/theShapeOfvoice/vow-cli/issues"
   }

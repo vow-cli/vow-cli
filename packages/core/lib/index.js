@@ -26,14 +26,14 @@ function registerCLICommand() {
   const name = Object.keys(pkg.bin)[0];
   program.version(version).name(name).usage("<command> [options]");
   program
-    .command("init [type]")
+    .command("init [projectName]")
     .description("项目初始化")
     .option("-f,--force", "是否覆盖当前路径")
     .option("--packagePath <packagePath>", "本地init模块路径")
-    .action(async (type, { force, packagePath }) => {
+    .action(async (projectName, { force, packagePath }) => {
       //默认执行的是脚手架自带的init模块,也可以通过packagePath指定本地的npm模块
       const initPackageName = "@vow-cli/init";
-      execCommand({ packagePath, packageName: initPackageName }, { type, force });
+      execCommand({ packagePath, packageName: initPackageName }, { projectName, force });
     });
   //TODO:其他命令
   program.parse(process.argv);
