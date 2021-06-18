@@ -35,6 +35,15 @@ function registerCLICommand() {
       const initPackageName = "@vow-cli/init";
       execCommand({ packagePath, packageName: initPackageName }, { projectName, force });
     });
+
+  program
+    .command("addTpl [tplTitle]")
+    .description("添加项目模板")
+    .action((tplTitle) => {
+      //TODO
+      console.log("添加模板", tplTitle);
+    });
+
   //TODO:其他命令
   program.parse(process.argv);
 }
