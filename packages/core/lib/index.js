@@ -5,8 +5,7 @@ const { log, Package, exec } = require("@vow-cli/utils");
 const program = require("commander");
 const beforeExecute = require("./beforeExecute");
 const pkg = require("../package.json");
-const { DEFAULT_CACHE_DIR_NAME, DEFAULT_DEPENDENCIES_DIR_NAME } = require("./constant");
-
+const { DEFAULT_CACHE_DIR_NAME, DEFAULT_DEPENDENCIES_DIR_NAME, DEFAULT_TEMPLATE_DIR_NAME, TYPE_PROJECT, TYPE_COMPONENT } = require("./constant");
 async function core() {
   try {
     await beforeExecute();
@@ -26,14 +25,18 @@ function registerCLICommand() {
   const name = Object.keys(pkg.bin)[0];
   program.version(version).name(name).usage("<command> [options]");
   program
-    .command("init [projectName]")
-    .description("项目初始化")
+    .command("init <type>")
+    .description("初始化项目或组件")
     .option("-f,--force", "是否覆盖当前路径")
     .option("--packagePath <packagePath>", "本地init模块路径")
-    .action(async (projectName, { force, packagePath }) => {
+    .action(async (type, { force, packagePath }) => {
       //默认执行的是脚手架自带的init模块,也可以通过packagePath指定本地的npm模块
       const initPackageName = "@vow-cli/init";
-      execCommand({ packagePath, packageName: initPackageName }, { projectName, force });
+      if (![TYPE_COMPONENT, TYPE_PROJECT].includes(type)) {
+        log.error("type error:", "type取值为:project、component");
+        return;
+      }
+      execCommand({ packagePath, packageName: initPackageName }, { type, force });
     });
 
   program
@@ -62,7 +65,9 @@ async function execCommand({ packagePath, packageName, packageVersion }, extraOp
       entryFile = await getRemotePackageEntryFile({ packageName, packageVersion });
     }
     //传递给init模块的参数
-    const _config = Object.assign({}, extraOptions);
+    const cliCacheDirPath = path.resolve(userHome, DEFAULT_CACHE_DIR_NAME);
+    const cliCacheTemplateDirPath = path.resolve(cliCacheDirPath, DEFAULT_TEMPLATE_DIR_NAME);
+    const _config = Object.assign({}, { cliCacheDirPath, cliCacheTemplateDirPath }, extraOptions);
     if (pathExists(entryFile)) {
       const code = `require('${entryFile}')(${JSON.stringify(_config)})`;
       const childProcess = exec("node", ["-e", code], { stdio: "inherit" });

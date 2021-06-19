@@ -28,9 +28,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "cli-spinner": "^0.2.10",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.1.1",
-    "npminstall": "^4.11.0",
+    "npminstall": "4.9.1",
     "npmlog": "^4.1.2",
     "semver": "^7.3.5",
     "url-join": "^4.0.1"

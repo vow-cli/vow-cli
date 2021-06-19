@@ -1,4 +1,4 @@
 module.exports = {
-  TYPE_PROJECT: "PROJECT",
-  TYPE_COMPONENT: "COMPONENT",
+  TYPE_PROJECT: "project",
+  TYPE_COMPONENT: "component",
 };

@@ -1,7 +1,7 @@
 const fse = require("fs-extra");
 const path = require("path");
 const semver = require("semver");
-const { log } = require("./log");
+const log = require("./log");
 const { getNpmRegistry, getLatestVersion } = require("./npm");
 const npminstall = require("npminstall");
 const formatPath = require("./formatPath");
@@ -16,13 +16,7 @@ class Package {
    * @param {*} packageVersion：package版本，默认latest
    * @return {*}
    */
-  constructor({
-    useOriginNpm,
-    targetPath,
-    storePath,
-    packageName,
-    packageVersion = "latest",
-  }) {
+  constructor({ useOriginNpm, targetPath, storePath, packageName, packageVersion = "latest" }) {
     this.useOriginNpm = useOriginNpm || false;
     this.targetPath = targetPath;
     this.storePath = storePath;
@@ -38,10 +32,7 @@ class Package {
    * @return {*}
    */
   get packagePath() {
-    return path.resolve(
-      this.storePath,
-      `_${this.packagePrefix}@${this.packageVersion}@${this.packageName}`
-    );
+    return path.resolve(this.storePath, `_${this.packagePrefix}@${this.packageVersion}@${this.packageName}`);
   }
 
   /**
@@ -97,6 +88,17 @@ class Package {
     return null;
   }
 
+  /**
+   * @description: 模板的package.json存在于template目录下
+   * @param {*} isOrigin
+   * @return {*}
+   */
+  getTemplatePackageJson(isOrigin) {
+    if (!isOrigin) {
+      return fse.readJSONSync(path.resolve(this.packagePath, "template", "package.json"));
+    }
+    return fse.readJSONSync(path.resolve(this.storePath, "template", "package.json"));
+  }
   /**
    * @description: 安装package到指定目录
    * @param {*}
