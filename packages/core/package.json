@@ -1,6 +1,6 @@
 {
   "name": "@vow-cli/core",
-  "version": "0.0.0",
+  "version": "0.1.5",
   "description": "> TODO: description",
   "author": "1340100932@qq.com <1340100932@qq.com>",
   "homepage": "",
@@ -24,8 +24,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@vow-cli/utils": "^0.0.0",
-    "@vow-cli/template": "^0.0.0",
+    "@vow-cli/template": "^0.1.5",
+    "@vow-cli/utils": "^0.1.5",
     "commander": "^7.2.0",
     "path-exists": "^4.0.0",
     "root-check": "1.0.0",
