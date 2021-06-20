@@ -10,6 +10,8 @@ const chalkInfo = chalk.blue;
 
 const chalkGray = chalk.gray;
 
+const chalkDebug = chalk.bold.gray;
+
 module.exports = {
   chalk,
   chalkInfo,
@@ -17,4 +19,5 @@ module.exports = {
   chalkWarning,
   chalkError,
   chalkGray,
+  chalkDebug,
 };

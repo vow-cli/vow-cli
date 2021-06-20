@@ -45,6 +45,8 @@ function registerCLICommand() {
     });
 
   //TODO:其他命令
+  program.option("-d,--debug", "开启debug模式");
+
   program.parse(process.argv);
 }
 
@@ -64,7 +66,7 @@ async function execCommand({ packagePath, packageName, packageVersion }, extraOp
     //传递给init模块的参数
     const cliCacheDirPath = path.resolve(userHome, DEFAULT_CACHE_DIR_NAME);
     const cliCacheTemplateDirPath = path.resolve(cliCacheDirPath, DEFAULT_TEMPLATE_DIR_NAME);
-    const _config = Object.assign({}, { cliCacheDirPath, cliCacheTemplateDirPath }, extraOptions);
+    const _config = Object.assign({}, { cliCacheDirPath, cliCacheTemplateDirPath }, extraOptions, { debug: process.env.LOG_LEVEL });
     if (pathExists(entryFile)) {
       const code = `require('${entryFile}')(${JSON.stringify(_config)})`;
       const childProcess = exec("node", ["-e", code], { stdio: "inherit" });

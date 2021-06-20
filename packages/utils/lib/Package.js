@@ -3,7 +3,7 @@ const path = require("path");
 const semver = require("semver");
 const log = require("./log");
 const { getNpmRegistry, getLatestVersion } = require("./npm");
-const { chalkError, chalkInfo } = require("./chalk");
+const { chalkError, chalkInfo, chalkDebug } = require("./chalk");
 const npminstall = require("npminstall");
 const formatPath = require("./formatPath");
 
@@ -48,14 +48,13 @@ class Package {
     if (!fse.pathExistsSync(this.storePath)) {
       fse.mkdirpSync(this.storePath);
     }
-    log.verbose("targetPath", this.targetPath);
-    log.verbose("storePath", this.storePath);
+    log.verbose(chalkDebug("targetPath: ", this.targetPath));
+    log.verbose(chalkDebug("storePath: ", this.storePath));
     if (!this.packageName) {
       log.error(chalkError("install package error", "packageName 不能为空"));
       return;
     }
     const latestVersion = await getLatestVersion(this.packageName);
-    log.verbose("lastestVersion", this.packageName, latestVersion);
     if (latestVersion) {
       this.packageVersion = latestVersion;
     }

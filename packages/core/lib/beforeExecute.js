@@ -18,6 +18,7 @@ async function beforeExecute() {
   checkNodeVersion();
   checkRootPermission();
   checkUserHome();
+  checkInputArgs();
   await checkNewVersion();
 }
 
@@ -78,6 +79,22 @@ async function checkNewVersion() {
   if (!isValid) {
     log.warn(chalkWarning("更新提示:", `当前版本:${currentVersion}, 最新版本${newestVersion}`));
   }
+}
+
+/**
+ * @description: 检查入参，开启debug模式
+ * @param {*}
+ * @return {*}
+ */
+function checkInputArgs() {
+  const minimist = require("minimist");
+  const args = minimist(process.argv.slice(2));
+  if (args.debug || args.d) {
+    process.env.LOG_LEVEL = "verbose";
+  } else {
+    process.env.LOG_LEVEL = "info";
+  }
+  log.level = process.env.LOG_LEVEL;
 }
 
 module.exports = beforeExecute;

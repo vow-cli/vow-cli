@@ -1,5 +1,7 @@
 const axios = require("axios");
 const urlJoin = require("url-join");
+const log = require("./log");
+const { chalkDebug } = require("./chalk");
 
 /**
  * @description: 获取npm镜像地址,可根据需要扩展
@@ -18,8 +20,10 @@ function getNpmRegistry(isOrigin = false) {
  */
 function getNpmInfo(npmName, registry) {
   registry = registry || getNpmRegistry();
+  log.verbose(chalkDebug("registry: ", registry));
   //访问该地址可以得到对应npm包的信息
   const fullNpmUrl = urlJoin(registry, npmName);
+  log.verbose(chalkDebug("fullNpmUrl:", fullNpmUrl));
   return axios
     .get(fullNpmUrl)
     .then((res) => {
@@ -58,6 +62,7 @@ async function getLatestVersion(npmName, registry) {
     return Promise.reject(new Error("获取最新版本号失败,请检查网络设置或者关闭本地代理"));
   }
   const latestVersion = data["dist-tags"].latest;
+  log.verbose(chalkDebug("latestVersion: ", data["dist-tags"].latest));
   return latestVersion;
 }
 

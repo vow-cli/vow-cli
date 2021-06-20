@@ -7,6 +7,7 @@ const {
   chalkSuccess,
   chalkError,
   chalkGray,
+  chalkDebug,
   exec,
   npm: { getLatestVersion },
 } = require("@vow-cli/utils");
@@ -17,6 +18,7 @@ const initProcessor = {};
 
 async function init(options) {
   try {
+    openDebugMode(options.debug);
     const { templateList, name, type, projectPath } = await beforeInit(options);
     const { cliCacheTemplateDirPath } = options;
     const processorOptions = {
@@ -31,6 +33,15 @@ async function init(options) {
   } finally {
     process.exit(0);
   }
+}
+
+/**
+ * @description: 开启debug模式
+ * @param {*} deugMode
+ * @return {*}
+ */
+function openDebugMode(deugMode = "info") {
+  log.level = deugMode;
 }
 
 /**
@@ -59,7 +70,6 @@ async function downloadTemplate({ templateList, cliCacheTemplateDirPath }) {
   const templateName = await getTemplateName(templateList);
   log.info(chalkGray("模板名称: ", templateName));
   const selectedTemplate = templateList.find((item) => item.name === templateName);
-  log.verbose("模板详情: ", selectedTemplate);
   let templateLastestVersion = await getLatestVersion(selectedTemplate.name);
   log.info(chalkInfo("最新版本：", templateLastestVersion));
   const templatePkg = new Package({
@@ -177,7 +187,6 @@ async function beforeInit({ force }) {
   //命令行当前目录的文件列表
   let fileList = fse.readdirSync(projectPath);
   fileList = fileList.filter((file) => !["node_modules", ".git"].includes(file));
-  log.verbose("fileList:", fileList);
   let isContinueWhenDirNotEmpty = true;
   if (fileList && fileList.length > 0) {
     isContinueWhenDirNotEmpty = await inquirer({
@@ -187,7 +196,7 @@ async function beforeInit({ force }) {
     });
   }
   if (!isContinueWhenDirNotEmpty) return;
-  log.verbose("isContinueWhenDirNotEmpty:", isContinueWhenDirNotEmpty);
+  log.verbose(chalkDebug("isContinueWhenDirNotEmpty:", isContinueWhenDirNotEmpty));
   //强制覆盖
   if (force) {
     const confirmEmptyDir = await inquirer({
@@ -199,12 +208,11 @@ async function beforeInit({ force }) {
     fse.emptyDirSync();
   }
   let initType = await getInitType();
-  log.verbose("initType", initType);
+  log.verbose(chalkDebug("initType", initType));
   let projectOrComponentName = "";
   while (!projectOrComponentName) {
     projectOrComponentName = await getProjectOrComponentName(initType);
   }
-  log.verbose(projectOrComponentName);
   const templateList = getTemplateList();
   return {
     templateList,
