@@ -7,9 +7,7 @@ const urlJoin = require("url-join");
  * @return {*}
  */
 function getNpmRegistry(isOrigin = false) {
-  return isOrigin
-    ? "https://registry.npmjs.org"
-    : "https://registry.npm.taobao.org";
+  return isOrigin ? "https://registry.npmjs.org" : "https://registry.npm.taobao.org";
 }
 
 /**
@@ -57,7 +55,7 @@ async function getNpmVersions(npmName, registry) {
 async function getLatestVersion(npmName, registry) {
   const data = await getNpmInfo(npmName, registry);
   if (!data["dist-tags"] || !data["dist-tags"].latest) {
-    return Promise.reject(new Error("Error: 没有 latest 版本号"));
+    return Promise.reject(new Error("获取最新版本号失败,请检查网络设置或者关闭本地代理"));
   }
   const latestVersion = data["dist-tags"].latest;
   return latestVersion;
