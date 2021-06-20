@@ -1,4 +1,15 @@
-const { log, inquirer, Package, spinner, exec } = require("@vow-cli/utils");
+const {
+  log,
+  inquirer,
+  Package,
+  spinner,
+  chalkInfo,
+  chalkSuccess,
+  chalkError,
+  chalkGray,
+  exec,
+  npm: { getLatestVersion },
+} = require("@vow-cli/utils");
 const { TYPE_PROJECT, TYPE_COMPONENT } = require("./constant");
 const fse = require("fs-extra");
 const path = require("path");
@@ -16,7 +27,7 @@ async function init(options) {
     };
     await initProcessor[type](processorOptions);
   } catch (e) {
-    log.error("init error:", e.message);
+    log.error(chalkError("init error:", e.message));
   } finally {
     process.exit(0);
   }
@@ -46,28 +57,31 @@ initProcessor[TYPE_PROJECT] = async function (processorOptions) {
  */
 async function downloadTemplate({ templateList, cliCacheTemplateDirPath }) {
   const templateName = await getTemplateName(templateList);
-  log.verbose("template", templateName);
+  log.info(chalkGray("模板名称: ", templateName));
   const selectedTemplate = templateList.find((item) => item.name === templateName);
-  log.verbose("selected template:", selectedTemplate);
+  log.verbose("模板详情: ", selectedTemplate);
+  let templateLastestVersion = await getLatestVersion(selectedTemplate.name);
+  log.info(chalkInfo("最新版本：", templateLastestVersion));
   const templatePkg = new Package({
     targetPath: cliCacheTemplateDirPath,
     storePath: cliCacheTemplateDirPath,
     packageName: selectedTemplate.name,
-    packageVersion: selectedTemplate.version,
+    packageVersion: templateLastestVersion,
   });
   //如果模板不存在
   const templateIsExists = templatePkg.isExistedPackage();
+  log.info(chalkGray("模板是否已存在? ", templateIsExists));
   if (!templateIsExists) {
     let spinnerStart = spinner("正在下载模板");
     await templatePkg.install();
     spinnerStart.stop(true);
-    log.info("下载模板成功");
+    log.info(chalkSuccess("下载模板成功"));
   } else {
-    log.notice("模板已存在,模板路径:", `${cliCacheTemplateDirPath}`);
+    log.info(chalkInfo("模板已存在,模板路径: ", `${cliCacheTemplateDirPath}`));
     let spinnerStart = spinner("开始更新模板");
     await templatePkg.updatePackage();
     spinnerStart.stop(true);
-    log.info("更新模板成功");
+    log.info(chalkSuccess("更新模板成功"));
   }
   //安装模板所在的根路径
   const packageSourcePath = templatePkg.packagePath;
@@ -96,12 +110,13 @@ async function installTemplate({ sourcePath, projectPath, name, startCommand }) 
   fse.ensureDirSync(projectPath);
   fse.copySync(sourcePath, projectPath);
   spinnerStart.stop(true);
-  log.info("模板安装成功");
+  log.info(chalkSuccess("模板安装成功"));
   //安装依赖
-  log.notice("开始安装依赖");
+  log.info(chalkInfo("开始安装依赖"));
   await npminstall(projectPath);
-  log.info("依赖安装成功");
+  log.info(chalkSuccess("依赖安装成功"));
   if (startCommand) {
+    log.info(chalkInfo("启动项目,启动命令为: ", startCommand));
     startCommand = startCommand.split(" ");
     await execStartCommand(projectPath, startCommand);
   }
@@ -148,7 +163,7 @@ async function execStartCommand(targetPath, startCommand) {
  * @return {*}
  */
 initProcessor[TYPE_COMPONENT] = function () {
-  console.log("组件初始化");
+  log.info("敬请期待~");
 };
 
 /**
@@ -157,7 +172,7 @@ initProcessor[TYPE_COMPONENT] = function () {
  * @param {*} type:project|component 初始化类型
  * @return {*}
  */
-async function beforeInit({ force, type }) {
+async function beforeInit({ force }) {
   const projectPath = process.cwd();
   //命令行当前目录的文件列表
   let fileList = fse.readdirSync(projectPath);
@@ -183,7 +198,7 @@ async function beforeInit({ force, type }) {
     if (!confirmEmptyDir) return;
     fse.emptyDirSync();
   }
-  let initType = type || (await getInitType());
+  let initType = await getInitType();
   log.verbose("initType", initType);
   let projectOrComponentName = "";
   while (!projectOrComponentName) {

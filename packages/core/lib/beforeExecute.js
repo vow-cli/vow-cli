@@ -5,6 +5,8 @@ const pkg = require("../package.json");
 const {
   log,
   npm: { getLatestVersion },
+  chalkInfo,
+  chalkWarning,
 } = require("@vow-cli/utils");
 /**
  * @description: 脚手架执行前的准备,比如版本校验等
@@ -25,7 +27,7 @@ async function beforeExecute() {
  * @return {*}
  */
 function tipsCurrentVersion() {
-  log.info("current version:", pkg.version);
+  log.info(chalkInfo("脚手架当前版本:", pkg.version));
 }
 
 /**
@@ -38,9 +40,7 @@ function checkNodeVersion() {
   const requiredVersion = pkg.engines.node;
   const isValid = semver.satisfies(currentVersion, requiredVersion);
   if (!isValid) {
-    throw new Error(
-      `vow-cli 要求Node.js版本${requiredVersion},系统当前的版本为${currentVersion}`
-    );
+    throw new Error(`vow-cli 要求Node.js版本${requiredVersion},系统当前的版本为${currentVersion}`);
   }
 }
 
@@ -76,10 +76,7 @@ async function checkNewVersion() {
   const newestVersion = await getLatestVersion(npmName);
   const isValid = semver.satisfies(currentVersion, `>=${newestVersion}`);
   if (!isValid) {
-    log.warn(
-      "更新提示:",
-      `当前版本:${currentVersion}, 最新版本${newestVersion}`
-    );
+    log.warn(chalkWarning("更新提示:", `当前版本:${currentVersion}, 最新版本${newestVersion}`));
   }
 }
 

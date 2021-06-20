@@ -5,6 +5,7 @@ const npm = require("./npm");
 const Package = require("./Package");
 const inquirer = require("./inquirer");
 const spinner = require("./spinner");
+const { chalk, chalkInfo, chalkSuccess, chalkWarning, chalkError, chalkGray } = require("./chalk");
 
 function exec(command, args, options) {
   const win32 = process.platform === "win32";
@@ -22,4 +23,10 @@ module.exports = {
   exec,
   inquirer,
   spinner,
+  chalk,
+  chalkInfo,
+  chalkSuccess,
+  chalkWarning,
+  chalkError,
+  chalkGray,
 };

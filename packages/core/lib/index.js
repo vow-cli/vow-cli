@@ -1,17 +1,18 @@
 const userHome = require("user-home");
 const pathExists = require("path-exists").sync;
 const path = require("path");
-const { log, Package, exec } = require("@vow-cli/utils");
+const { log, Package, exec, chalkError } = require("@vow-cli/utils");
 const program = require("commander");
 const beforeExecute = require("./beforeExecute");
 const pkg = require("../package.json");
-const { DEFAULT_CACHE_DIR_NAME, DEFAULT_DEPENDENCIES_DIR_NAME, DEFAULT_TEMPLATE_DIR_NAME, TYPE_PROJECT, TYPE_COMPONENT } = require("./constant");
+const { DEFAULT_CACHE_DIR_NAME, DEFAULT_DEPENDENCIES_DIR_NAME, DEFAULT_TEMPLATE_DIR_NAME } = require("./constant");
+
 async function core() {
   try {
     await beforeExecute();
     registerCLICommand();
   } catch (e) {
-    log.error(e.message);
+    log.error(chalkError("core error:", e.message));
   }
 }
 
@@ -25,18 +26,14 @@ function registerCLICommand() {
   const name = Object.keys(pkg.bin)[0];
   program.version(version).name(name).usage("<command> [options]");
   program
-    .command("init <type>")
+    .command("init [type]")
     .description("初始化项目或组件")
     .option("-f,--force", "是否覆盖当前路径")
     .option("--packagePath <packagePath>", "本地init模块路径")
     .action(async (type, { force, packagePath }) => {
       //默认执行的是脚手架自带的init模块,也可以通过packagePath指定本地的npm模块
       const initPackageName = "@vow-cli/init";
-      if (![TYPE_COMPONENT, TYPE_PROJECT].includes(type)) {
-        log.error("type error:", "type取值为:project、component");
-        return;
-      }
-      execCommand({ packagePath, packageName: initPackageName }, { type, force });
+      execCommand({ packagePath, packageName: initPackageName }, { force });
     });
 
   program
@@ -80,10 +77,10 @@ async function execCommand({ packagePath, packageName, packageVersion }, extraOp
         process.exit(c);
       });
     } else {
-      log.error("init package", "package入口文件不存在");
+      log.error(chalkError("init package", "package入口文件不存在"));
     }
   } catch (e) {
-    log.error(e.message);
+    log.error(chalkError("init package", e.message));
   }
 }
 

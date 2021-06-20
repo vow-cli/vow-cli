@@ -3,6 +3,7 @@ const path = require("path");
 const semver = require("semver");
 const log = require("./log");
 const { getNpmRegistry, getLatestVersion } = require("./npm");
+const { chalkError, chalkInfo } = require("./chalk");
 const npminstall = require("npminstall");
 const formatPath = require("./formatPath");
 
@@ -50,7 +51,7 @@ class Package {
     log.verbose("targetPath", this.targetPath);
     log.verbose("storePath", this.storePath);
     if (!this.packageName) {
-      log.error("install package error", "packageName 不能为空");
+      log.error(chalkError("install package error", "packageName 不能为空"));
       return;
     }
     const latestVersion = await getLatestVersion(this.packageName);
@@ -160,7 +161,7 @@ class Package {
         ],
       });
     } else {
-      log.info("update package", `${this.packageName}已是最新版本`);
+      log.info(chalkInfo("update package", `${this.packageName}已是最新版本`));
     }
   }
 }
