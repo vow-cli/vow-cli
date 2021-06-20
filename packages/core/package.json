@@ -1,6 +1,6 @@
 {
   "name": "@vow-cli/core",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "> TODO: description",
   "author": "1340100932@qq.com <1340100932@qq.com>",
   "homepage": "",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@vow-cli/template": "^1.0.9",
-    "@vow-cli/utils": "^1.0.9",
+    "@vow-cli/utils": "^1.0.10",
     "commander": "^7.2.0",
     "path-exists": "^4.0.0",
     "root-check": "1.0.0",

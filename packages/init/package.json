@@ -1,6 +1,6 @@
 {
   "name": "@vow-cli/init",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "> TODO: description",
   "author": "1340100932@qq.com <1340100932@qq.com>",
   "homepage": "https://github.com/theShapeOfvoice/vow-cli#readme",
@@ -25,7 +25,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@vow-cli/utils": "^1.0.9",
+    "@vow-cli/utils": "^1.0.10",
     "fs-extra": "^10.0.0"
   },
   "bugs": {
