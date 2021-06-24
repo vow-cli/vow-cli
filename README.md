@@ -52,8 +52,8 @@ vow-cli init --packagePath <packagePath>
 
 > vow-cli
 
-<img src="" / >
+![vow-cli](https://github.com/vow-cli/vow-cli/blob/dev/docs/img/20210624223408.png)
 
 > vow-cli init
 
-<img src="" / >
+![vow-cli init](https://github.com/vow-cli/vow-cli/blob/dev/docs/img/20210624223359.png)
